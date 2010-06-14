@@ -19,7 +19,7 @@
  * Сущность временных данных OpenID
  *
  */
-class PluginOpenid_OpenidEntity_Tmp extends Entity 
+class PluginOpenid_ModuleOpenid_EntityTmp extends Entity 
 {    
     
 }

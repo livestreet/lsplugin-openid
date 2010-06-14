@@ -15,15 +15,12 @@
 ---------------------------------------------------------
 */
 
-set_include_path(get_include_path().PATH_SEPARATOR.dirname(__FILE__));
-require_once('mapper/Openid.mapper.class.php');
-
 
 /**
  * Модуль OpenID авторизации
  *
  */
-class PluginOpenid_Openid extends Module {
+class PluginOpenid_ModuleOpenid extends Module {
 
 	protected $oConsumer=null;
 	protected $oMapper;
@@ -34,8 +31,8 @@ class PluginOpenid_Openid extends Module {
 	public function Init() {
 		/**
 		 * Подключаем маппер
-		 */
-		$this->oMapper=new PluginOpenid_Mapper_Openid($this->Database_GetConnect());
+		 */		
+		$this->oMapper=Engine::GetMapper(__CLASS__);
 		/**
 		 * Если нужно то отключаем использование библиотеки GMP
 		 */
@@ -186,10 +183,10 @@ class PluginOpenid_Openid extends Module {
 	/**
 	 * Создает связь OpenID
 	 *
-	 * @param PluginOpenid_OpenidEntity_Openid $oOpenId
+	 * @param PluginOpenid_ModuleOpenid_EntityOpenid $oOpenId
 	 * @return unknown
 	 */
-	public function AddOpenId(PluginOpenid_OpenidEntity_Openid $oOpenId) {
+	public function AddOpenId(PluginOpenid_ModuleOpenid_EntityOpenid $oOpenId) {
 		return $this->oMapper->AddOpenId($oOpenId);
 	}
 	/**
@@ -222,19 +219,19 @@ class PluginOpenid_Openid extends Module {
 	/**
 	 * Создает временные данные
 	 *
-	 * @param PluginOpenid_OpenidEntity_Tmp $oTmp
+	 * @param PluginOpenid_ModuleOpenid_EntityTmp $oTmp
 	 * @return unknown
 	 */
-	public function AddTmp(PluginOpenid_OpenidEntity_Tmp $oTmp) {
+	public function AddTmp(PluginOpenid_ModuleOpenid_EntityTmp $oTmp) {
 		return $this->oMapper->AddTmp($oTmp);
 	}
 	/**
 	 * Обновляет временные данные
 	 *
-	 * @param PluginOpenid_OpenidEntity_Tmp $oTmp
+	 * @param PluginOpenid_ModuleOpenid_EntityTmp $oTmp
 	 * @return unknown
 	 */
-	public function UpdateTmp(PluginOpenid_OpenidEntity_Tmp $oTmp) {
+	public function UpdateTmp(PluginOpenid_ModuleOpenid_EntityTmp $oTmp) {
 		return $this->oMapper->UpdateTmp($oTmp);
 	}
 	/**

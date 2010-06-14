@@ -19,7 +19,7 @@
  * Сущность связи OpenID с пользователем
  *
  */
-class PluginOpenid_OpenidEntity_Openid extends Entity 
+class PluginOpenid_ModuleOpenid_EntityOpenid extends Entity 
 {    
     
 }

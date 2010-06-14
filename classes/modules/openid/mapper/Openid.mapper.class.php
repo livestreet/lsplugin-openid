@@ -19,15 +19,15 @@
  * Маппер, обрабатывает запросы к БД
  *
  */
-class PluginOpenid_Mapper_Openid extends Mapper {	
+class PluginOpenid_ModuleOpenid_MapperOpenid extends Mapper {	
 	
 	/**
 	 * Создает связь OpenID
 	 *
-	 * @param PluginOpenid_OpenidEntity_Openid $oOpenId
+	 * @param PluginOpenid_ModuleOpenid_EntityOpenid $oOpenId
 	 * @return unknown
 	 */
-	public function AddOpenId(PluginOpenid_OpenidEntity_Openid $oOpenId) {
+	public function AddOpenId(PluginOpenid_ModuleOpenid_EntityOpenid $oOpenId) {
 		$sql = "INSERT INTO ".Config::Get('plugin.openid.table.openid')." SET ?a ";			
 		if ($this->oDb->query($sql,$oOpenId->_getData())===0) {
 			return true;
@@ -89,10 +89,10 @@ class PluginOpenid_Mapper_Openid extends Mapper {
 	/**
 	 * Создает временные данные
 	 *
-	 * @param PluginOpenid_OpenidEntity_Tmp $oTmp
+	 * @param PluginOpenid_ModuleOpenid_EntityTmp $oTmp
 	 * @return unknown
 	 */
-	public function AddTmp(PluginOpenid_OpenidEntity_Tmp $oTmp) {
+	public function AddTmp(PluginOpenid_ModuleOpenid_EntityTmp $oTmp) {
 		$sql = "INSERT INTO ".Config::Get('plugin.openid.table.openid_tmp')." SET ?a ";			
 		if ($this->oDb->query($sql,$oTmp->_getData())===0) {
 			return true;
@@ -102,10 +102,10 @@ class PluginOpenid_Mapper_Openid extends Mapper {
 	/**
 	 * Обновляет временные данные
 	 *
-	 * @param PluginOpenid_OpenidEntity_Tmp $oTmp
+	 * @param PluginOpenid_ModuleOpenid_EntityTmp $oTmp
 	 * @return unknown
 	 */
-	public function UpdateTmp(PluginOpenid_OpenidEntity_Tmp $oTmp) {
+	public function UpdateTmp(PluginOpenid_ModuleOpenid_EntityTmp $oTmp) {
 		$sql = "UPDATE ".Config::Get('plugin.openid.table.openid_tmp')." SET ?a WHERE `key` = ? ";			
 		return $this->oDb->query($sql,$oTmp->_getData(array('confirm_mail_key','confirm_mail')),$oTmp->getKey());
 	}

@@ -7,9 +7,9 @@
 		<lang name="default">LiveStreet Developers Team</lang>
 	</author>
 	<homepage>http://livestreetcms.com</homepage>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 	<requires>
-		<livestreet>0.4.0</livestreet>
+		<livestreet>0.4.1</livestreet>
 		<plugins>
 
 		</plugins>
