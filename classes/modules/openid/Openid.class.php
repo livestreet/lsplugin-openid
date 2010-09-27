@@ -164,7 +164,7 @@ class PluginOpenid_ModuleOpenid extends Module {
 	 */
 	protected function getTrustRoot() {
 		return sprintf("%s://%s:%s%s/",
-			$this->getScheme(), $_SERVER['SERVER_NAME'],
+			$this->getScheme(), array_shift(explode(':', $_SERVER['HTTP_HOST'])),
 			$_SERVER['SERVER_PORT'],
 		'');
 	}
