@@ -41,6 +41,7 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 		$this->AddEventPreg('/^login$/i','/^enter$/i','/^(finish)?$/i','EventOpenId');
 		$this->AddEventPreg('/^login$/i','/^data$/i','/^$/i','EventData');
 		$this->AddEventPreg('/^login$/i','/^vk$/i','/^$/i','EventVk');
+		$this->AddEventPreg('/^login$/i','/^fb$/i','/^$/i','EventFacebook');
 		$this->AddEventPreg('/^login$/i','/^confirm$/i','/^$/i','EventConfirmMail');
 	}
 		
@@ -470,8 +471,67 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 					Router::Location(Router::GetPath('login').'openid/data/');				
 				}
 			} else {
-				setcookie('vk_app_'.Config::Get('plugin.openid.vk.id'),'',1,Config::Get('sys.cookie.path'),Config::Get('sys.cookie.host'));
+				setcookie($sCookieName,'',1,Config::Get('sys.cookie.path'),Config::Get('sys.cookie.host'));
 				$this->Message_AddErrorSingle($this->Lang_Get('openid_result_error_vk'),$this->Lang_Get('error'));
+			}
+		}
+		$this->SetTemplateAction('openid');
+	}
+	
+	/**
+	 * Авторизация через Facebook
+	 *
+	 */
+	protected function EventFacebook() {		
+		/**
+		 * Читаем куку и проверяем подпись
+		 */
+		$sCookieName='fbs_'.Config::Get('plugin.openid.fb.id');
+		if (isset($_COOKIE[$sCookieName])) {
+			$aParams = array();
+			parse_str(trim($_COOKIE[$sCookieName], '\\"'), $aParams);
+			ksort($aParams);
+			$sHashSource = '';
+			foreach ($aParams as $key => $value) {
+				if ($key!='sig') {
+					$sHashSource.=$key.'='.$value;
+				}
+			}
+			$sHash=md5($sHashSource.Config::Get('plugin.openid.fb.secret'));
+			if (isset($aParams['sig']) and $sHash==$aParams['sig'] and isset($aParams['uid'])) {				
+				$sOpenId='fb_'.$aParams['uid'];
+				/**
+				 * Если уже есть связь с этим OpenID то авторизуем
+				 */
+				if ($oUser=$this->PluginOpenid_Openid_GetUserByOpenId($sOpenId)) {
+					$this->User_Authorization($oUser);
+					Router::Location(Config::Get('path.root.web').'/');
+				} else {					
+					/**
+					 * Связи нет
+					 */
+					$aData=array();
+					/**
+					 * Заполняем данные (логин)
+					 */
+					
+					
+					/**
+				 	* Заполняем временную таблицу, пишем в куки ключ и перенаправляем на страницу ввода дополнительных данных
+				 	*/
+					$oTmp=Engine::GetEntity('PluginOpenid_Openid_Tmp');
+					$oTmp->setKey(func_generator(32));
+					$oTmp->setOpenid($sOpenId);
+					$oTmp->setData(serialize($aData));
+					$oTmp->setDate(date("Y-m-d H:i:s"));
+					$this->PluginOpenid_Openid_AddTmp($oTmp);
+					
+					setcookie('openidkey',$oTmp->getKey(),time()+Config::Get('plugin.openid.time_key_limit'),Config::Get('sys.cookie.path'),Config::Get('sys.cookie.host'));
+					Router::Location(Router::GetPath('login').'openid/data/');				
+				}				
+			} else {
+				setcookie($sCookieName,'',1,Config::Get('sys.cookie.path'),Config::Get('sys.cookie.host'));
+				$this->Message_AddErrorSingle($this->Lang_Get('openid_result_error_fb'),$this->Lang_Get('error'));
 			}
 		}
 		$this->SetTemplateAction('openid');

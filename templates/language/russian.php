@@ -36,6 +36,7 @@ return array(
 	'openid_result_success' => 'Авторизация прошла успешно',
 	'openid_result_error' => 'Ошибка OpenId авторизации, возможно вы указали неверный OpenID адрес',
 	'openid_result_error_vk' => 'Ошибка авторизации, верификация ВКонтакте не пройдена',
+	'openid_result_error_fb' => 'Ошибка авторизации, верификация Facebook не пройдена',
 	'openid_key_no_valid' => 'Невалидный ключ OpenID авторизации',
 	
 	'openid_confirm_mail_send' => 'На ваш email отправлена ссылка для подтверждения OpenID авторизации.',
