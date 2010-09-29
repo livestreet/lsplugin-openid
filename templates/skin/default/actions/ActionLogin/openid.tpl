@@ -53,7 +53,17 @@ var sVkLoginPath='{$aRouter.login}'+'openid/vk/';
 	}
 	
 	function openid_vk() {		
-		VK.Auth.login(null,VK.access.FRIENDS);
+		VK.Auth.getLoginStatus(function(response) {
+			if (response.session) {
+				window.location = sVkLoginPath;
+			} else {
+				VK.Auth.login(function(response) {
+					if (response.session) {
+						window.location = sVkLoginPath;
+					}
+				},VK.access.FRIENDS);				
+			}
+		});
 	}
 		
 	VK.init({
@@ -61,9 +71,6 @@ var sVkLoginPath='{$aRouter.login}'+'openid/vk/';
 		nameTransportPath: sVkTransportPath
 	});
 	
-	VK.Observer.subscribe('auth.login', function(response) {
-		window.location = sVkLoginPath;
-	});
 		
 </script>
 {/literal}
