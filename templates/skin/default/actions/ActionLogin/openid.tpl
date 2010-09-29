@@ -21,12 +21,14 @@
 		
 		<div class="openid-services">
 			<p>{$aLang.openid_choose_service}</p>
+
+			<a href="javascript: openid_fb()"><img src="{$sTemplateWebPathPlugin}img/openid_fb.png" alt="facebook" width="154px" height="22px" /></a>
+			<a href="javascript: openid_twitter()"><img src="{$sTemplateWebPathPlugin}img/openid_twitter.png" alt="twitter" width="151px" height="24px" /></a>
+			<br>
 			<a href="javascript: openid_yandex()"><img src="{$sTemplateWebPathPlugin}img/openid_yandex.png" alt="yandex" width="47px" height="21px" /></a>
 			<a href="javascript: openid_google()"><img src="{$sTemplateWebPathPlugin}img/openid_google.png" class="google"  alt="google" width="63px" height="21px" /></a>
 			<a href="javascript: openid_rambler()"><img src="{$sTemplateWebPathPlugin}img/openid_rambler.png" alt="rambler" width="84px" height="21px" /></a>
-			<a href="javascript: openid_vk()"><img src="{$sTemplateWebPathPlugin}img/openid_vk.png" alt="vkontakte" width="84px" height="21px" /></a>
-			<br>
-			<a href="javascript: openid_fb()"><img src="{$sTemplateWebPathPlugin}img/openid_fb.png" alt="facebook" width="24px" height="24px" /></a>
+			<a href="javascript: openid_vk()"><img src="{$sTemplateWebPathPlugin}img/openid_vk.png" alt="vkontakte" width="84px" height="21px" /></a>			
 		</div>					
 	</form>
 </div>
@@ -38,6 +40,7 @@ var iVkAppId='{cfg name='plugin.openid.vk.id'}';
 var iFbAppId='{cfg name='plugin.openid.fb.id'}';
 var sVkLoginPath='{$aRouter.login}'+'openid/vk/';
 var sFbLoginPath='{$aRouter.login}'+'openid/fb/';
+var sTwitterLoginPath='{$aRouter.login}'+'openid/twitter/?authorize=1';
 {literal}
 	function getEl(id) {
 		return document.getElementById(id);
@@ -85,6 +88,10 @@ var sFbLoginPath='{$aRouter.login}'+'openid/fb/';
 				});				
 			}
 		});
+	}
+	
+	function openid_twitter() {
+		window.location = sTwitterLoginPath;
 	}
 	
 	VK.init({apiId: iVkAppId, nameTransportPath: sVkTransportPath});

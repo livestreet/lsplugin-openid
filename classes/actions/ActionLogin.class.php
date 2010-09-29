@@ -42,6 +42,7 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 		$this->AddEventPreg('/^login$/i','/^data$/i','/^$/i','EventData');
 		$this->AddEventPreg('/^login$/i','/^vk$/i','/^$/i','EventVk');
 		$this->AddEventPreg('/^login$/i','/^fb$/i','/^$/i','EventFacebook');
+		$this->AddEventPreg('/^login$/i','/^twitter$/i','/^$/i','EventTwitter');
 		$this->AddEventPreg('/^login$/i','/^confirm$/i','/^$/i','EventConfirmMail');
 	}
 		
@@ -534,6 +535,62 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 				$this->Message_AddErrorSingle($this->Lang_Get('openid_result_error_fb'),$this->Lang_Get('error'));
 			}
 		}
+		$this->SetTemplateAction('openid');
+	}
+	
+	/**
+	 * Авторизация через Twitter
+	 *
+	 */
+	protected function EventTwitter() {
+		
+		if (getRequest('callback')) {
+			if ($this->PluginOpenid_Oauth_VerifyTwitter() and $data=$this->PluginOpenid_Oauth_GetTwitter('account/verify_credentials')) {
+											
+				$sOpenId='twitter_'.$data->screen_name;
+				
+				/**
+				 * Если уже есть связь с этим OpenID то авторизуем
+				 */
+				if ($oUser=$this->PluginOpenid_Openid_GetUserByOpenId($sOpenId)) {
+					$this->User_Authorization($oUser);
+					Router::Location(Config::Get('path.root.web').'/');
+				} else {					
+					/**
+					 * Связи нет
+					 */
+					$aData=array();
+					/**
+					 * Заполняем данные (логин)
+					 */
+					
+					
+					/**
+				 	* Заполняем временную таблицу, пишем в куки ключ и перенаправляем на страницу ввода дополнительных данных
+				 	*/
+					$oTmp=Engine::GetEntity('PluginOpenid_Openid_Tmp');
+					$oTmp->setKey(func_generator(32));
+					$oTmp->setOpenid($sOpenId);
+					$oTmp->setData(serialize($aData));
+					$oTmp->setDate(date("Y-m-d H:i:s"));
+					$this->PluginOpenid_Openid_AddTmp($oTmp);
+					
+					setcookie('openidkey',$oTmp->getKey(),time()+Config::Get('plugin.openid.time_key_limit'),Config::Get('sys.cookie.path'),Config::Get('sys.cookie.host'));
+					Router::Location(Router::GetPath('login').'openid/data/');				
+				}
+				
+				
+			} else {
+				$this->Message_AddErrorSingle($this->Lang_Get('openid_result_error_twitter'),$this->Lang_Get('error'));
+			}
+		}		
+		
+		if (getRequest('authorize')) {
+			if (!$this->PluginOpenid_Oauth_LoginTwitter(Router::GetPath('login').'openid/twitter/?callback=1')) {
+				$this->Message_AddErrorSingle($this->Lang_Get('openid_result_error_twitter'),$this->Lang_Get('error'));
+			} 
+		}
+		
 		$this->SetTemplateAction('openid');
 	}
 }

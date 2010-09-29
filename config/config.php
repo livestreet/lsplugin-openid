@@ -48,5 +48,11 @@ $config['vk']['transport_path']   = '/plugins/openid/include/xd_receiver.html'; 
 $config['fb']['id']   = 1111; // Application ID
 $config['fb']['secret']   = '1111'; // Application Secret
 
+/**
+ * Настройки Twitter Application
+ */
+$config['twitter']['token']   = 1111; // Access Token
+$config['twitter']['token_secret']   = '1111'; // Access Token Secret
+
 return $config;
 ?>
