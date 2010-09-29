@@ -29,13 +29,14 @@ class PluginOpenid_ModuleOauth extends Module {
 	 *
 	 */
 	public function Init() {
-		require_once(Plugin::GetPath(__CLASS__).'classes/lib/external/OAuth/twitteroauth.php');
+		require_once(Plugin::GetPath(__CLASS__).'classes/lib/external/OAuth/twitteroauth/twitteroauth.php');
 	}
 		
 	public function LoginTwitter($sPath) {		
 		$OAuth = new TwitterOAuth(Config::Get('plugin.openid.twitter.token'), Config::Get('plugin.openid.twitter.token_secret'));		
-		$aRequestToken = $OAuth->getRequestToken($sPath);
-		
+		if (!($aRequestToken = $OAuth->getRequestToken($sPath))) {
+			return false;
+		}		
 		$_SESSION['twitter_oauth_token'] = $sToken = $aRequestToken['oauth_token'];
 		$_SESSION['twitter_oauth_token_secret'] = $aRequestToken['oauth_token_secret'];
 		$_SESSION['oauth_return_path'] = $sPath;
