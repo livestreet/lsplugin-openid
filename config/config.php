@@ -51,7 +51,7 @@ $config['fb']['secret']   = '1111'; // Application Secret
 /**
  * Настройки Twitter Application
  */
-$config['twitter']['token']   = 1111; // Access Token
+$config['twitter']['token']   = '1111'; // Access Token
 $config['twitter']['token_secret']   = '1111'; // Access Token Secret
 
 return $config;
