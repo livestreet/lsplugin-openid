@@ -10,6 +10,7 @@
 2. Через панель управления плагинами (/admin/plugins/) запустить его активацию.
 3. Выполнить настройки плагина в файле /plugins/openid/config/config.php, для авторизации через ВКонтакте необходимо создать приложение на сайте vkontakte.ru и прописать его параметры в конфиге.
 	Более подробно о ВКонтакте можно прочитать здесь - http://vkontakte.ru/developers.php?o=-1&p=Open+API
+	Для Facebook также необходимо указать параметры в конфиге, подробнее здесь - http://developers.facebook.com/docs/guides/canvas/
 
 АВТОРЫ
 LiveStreet Developers Team

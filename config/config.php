@@ -42,5 +42,11 @@ $config['vk']['id']   = 1111; // ID приложения
 $config['vk']['secure_key']   = '1111'; // Защищенный ключ приложения
 $config['vk']['transport_path']   = '/plugins/openid/include/xd_receiver.html'; // Путь от корня сайта до файла транспорта
 
+/**
+ * Настройки Facebook Application
+ */
+$config['fb']['id']   = 1111; // Application ID
+$config['fb']['secret']   = '1111'; // Application Secret
+
 return $config;
 ?>
