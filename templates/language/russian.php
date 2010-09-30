@@ -21,8 +21,8 @@
 return array(
 	'openid' => 'OpenID',
 	'openid_enter' => 'Войти',
-	'openid_enter_title' => 'Вход используя',
-	'openid_enter_title_alter' => 'Войти через OpenID, GMail, ВКонтакте',
+	'openid_enter_title' => 'Войти, используя',
+	'openid_enter_title_alter' => 'Войти через OpenID, GMail, ВКонтакте, Facebook, Twitter, Yandex, Rambler',
 	'openid_choose_service' => 'Пользуетесь одним из сервисов?',
 	'openid_continue' => 'Продолжение авторизации',
 	'openid_type_new' => 'Новый пользователь',
