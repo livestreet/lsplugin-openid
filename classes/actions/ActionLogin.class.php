@@ -33,7 +33,6 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 			$this->Message_AddErrorSingle($this->Lang_Get('registration_is_authorization'),$this->Lang_Get('attention'));
 			return Router::Action('error'); 
 		}
-		$this->Viewer_Assign('sTemplateWebPathPlugin',Plugin::GetTemplateWebPath(__CLASS__));
 	}
 	
 	protected function RegisterEvent() {
@@ -71,7 +70,7 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 		 * Проверяем валидность ключа подтверждения почты
 		 */
 		if (!($oKey=$this->PluginOpenid_Openid_GetTmpByConfirmMailKey(getRequest('confirm_key')))) {
-			$this->Message_AddErrorSingle($this->Lang_Get('openid_confirm_mail_key_no_valid'));
+			$this->Message_AddErrorSingle($this->Lang_Get('plugin.openid.confirm_mail_key_no_valid'));
 			return Router::Action('error');
 		}
 		
@@ -84,7 +83,7 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 			 * А не занят ли уже Openid?
 			 */
 			if ($this->PluginOpenid_Openid_GetOpenId($oKey->getOpenid())) {
-				$this->Message_AddErrorSingle($this->Lang_Get('openid_confirm_mail_busy'));
+				$this->Message_AddErrorSingle($this->Lang_Get('plugin.openid.confirm_mail_busy'));
 				return Router::Action('error');
 			}
 			/**
@@ -162,7 +161,7 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 		 * Если ключ не валиден
 		 */
 		if (!$bKeyValid) {
-			$this->Message_AddErrorSingle($this->Lang_Get('openid_key_no_valid'));
+			$this->Message_AddErrorSingle($this->Lang_Get('plugin.openid.key_no_valid'));
 			return Router::Action('error');
 		}		
 		/**
@@ -310,7 +309,7 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 				$this->Notify_Send(
 					$oUser,
 					'notify.confirm_mail.tpl',
-					$this->Lang_Get('openid_confirm_mail_subject'),
+					$this->Lang_Get('plugin.openid.confirm_mail_subject'),
 					array(
 						'oKey'=>$oKey
 					),
@@ -319,7 +318,7 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 				/**
 				 * Показываем сообщение о том, что письмо отправлено
 				 */
-				$this->Message_AddErrorSingle($this->Lang_Get('openid_confirm_mail_send'));
+				$this->Message_AddErrorSingle($this->Lang_Get('plugin.openid.confirm_mail_send'));
 				return Router::Action('error');
 			}
 		}
@@ -397,7 +396,7 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 			 * Здесь происходит редирект на сервер OpenID
 			 */
 			if (!$this->PluginOpenid_Openid_Login(getRequest('open_login'),$sPathReturn)) {
-				$this->Message_AddErrorSingle($this->Lang_Get('openid_result_error'),$this->Lang_Get('error'));
+				$this->Message_AddErrorSingle($this->Lang_Get('plugin.openid.result_error'),$this->Lang_Get('error'));
 			} 
 		}
 		/**
@@ -473,7 +472,7 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 				}
 			} else {
 				setcookie($sCookieName,'',1,Config::Get('sys.cookie.path'),Config::Get('sys.cookie.host'));
-				$this->Message_AddErrorSingle($this->Lang_Get('openid_result_error_vk'),$this->Lang_Get('error'));
+				$this->Message_AddErrorSingle($this->Lang_Get('plugin.openid.result_error_vk'),$this->Lang_Get('error'));
 			}
 		}
 		$this->SetTemplateAction('openid');
@@ -487,20 +486,12 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 		/**
 		 * Читаем куку и проверяем подпись
 		 */
-		$sCookieName='fbs_'.Config::Get('plugin.openid.fb.id');
-		if (isset($_COOKIE[$sCookieName])) {
-			$aParams = array();
-			parse_str(trim($_COOKIE[$sCookieName], '\\"'), $aParams);
-			ksort($aParams);
-			$sHashSource = '';
-			foreach ($aParams as $key => $value) {
-				if ($key!='sig') {
-					$sHashSource.=$key.'='.$value;
-				}
-			}
-			$sHash=md5($sHashSource.Config::Get('plugin.openid.fb.secret'));
-			if (isset($aParams['sig']) and $sHash==$aParams['sig'] and isset($aParams['uid'])) {				
-				$sOpenId='fb_'.$aParams['uid'];
+		$sCookieName='fbsr_'.Config::Get('plugin.openid.fb.id');
+		if (isset($_COOKIE[$sCookieName]) and is_string($_COOKIE[$sCookieName])) {
+			$aParams=$this->parse_signed_facebook($_COOKIE[$sCookieName],Config::Get('plugin.openid.fb.secret'));
+
+			if ($aParams and isset($aParams['user_id'])) {
+				$sOpenId='fb_'.$aParams['user_id'];
 				/**
 				 * Если уже есть связь с этим OpenID то авторизуем
 				 */
@@ -532,7 +523,7 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 				}				
 			} else {
 				setcookie($sCookieName,'',1,Config::Get('sys.cookie.path'),Config::Get('sys.cookie.host'));
-				$this->Message_AddErrorSingle($this->Lang_Get('openid_result_error_fb'),$this->Lang_Get('error'));
+				$this->Message_AddErrorSingle($this->Lang_Get('plugin.openid.result_error_fb'),$this->Lang_Get('error'));
 			}
 		}
 		$this->SetTemplateAction('openid');
@@ -581,17 +572,42 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 				
 				
 			} else {
-				$this->Message_AddErrorSingle($this->Lang_Get('openid_result_error_twitter'),$this->Lang_Get('error'));
+				$this->Message_AddErrorSingle($this->Lang_Get('plugin.openid.result_error_twitter'),$this->Lang_Get('error'));
 			}
 		}		
 		
 		if (getRequest('authorize')) {
 			if (!$this->PluginOpenid_Oauth_LoginTwitter(Router::GetPath('login').'openid/twitter/?callback=1')) {
-				$this->Message_AddErrorSingle($this->Lang_Get('openid_result_error_twitter'),$this->Lang_Get('error'));
+				$this->Message_AddErrorSingle($this->Lang_Get('plugin.openid.result_error_twitter'),$this->Lang_Get('error'));
 			} 
 		}
 		
 		$this->SetTemplateAction('openid');
+	}
+
+
+	protected function parse_signed_facebook($signed_request, $secret) {
+		list($encoded_sig, $payload) = explode('.', $signed_request, 2);
+
+		// decode the data
+		$sig = $this->base64_url_decode($encoded_sig);
+		$data = json_decode($this->base64_url_decode($payload), true);
+
+		if (strtoupper($data['algorithm']) !== 'HMAC-SHA256') {
+			return null;
+		}
+
+		// check sig
+		$expected_sig = hash_hmac('sha256', $payload, $secret, $raw = true);
+		if ($sig !== $expected_sig) {
+			return null;
+		}
+
+		return $data;
+	}
+
+	protected function base64_url_decode($input) {
+		return base64_decode(strtr($input, '-_', '+/'));
 	}
 }
 ?>

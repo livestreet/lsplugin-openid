@@ -1,6 +1,11 @@
-{include file='header.tpl' menu='settings' showWhiteBack=true}
+{assign var="sidebarPosition" value='left'}
+{include file='header.tpl'}
 
-<h1>{$aLang.openid_menu_settings_title}</h1>
+{include file='menu.settings.tpl'}
+
+<form action="" method="POST" enctype="multipart/form-data" class="wrapper-content">
+
+<h3>{$aLang.plugin.openid.menu_settings_title}</h3>
 
 {if count($aOpenId)}
 
@@ -27,11 +32,13 @@
 
 	<ul>
 	{foreach from=$aOpenId item=oOpenId}
-		<li>{$oOpenId->getOpenid()|escape:'html'} <a href="#" onclick="return deleteOpenID('{$oOpenId->getOpenid()|escape:'html'}',this);"><img src="{$sTemplateWebPathPlugin}img/delete.png" alt="{$aLang.openid_menu_settings_delete}" title="{$aLang.openid_menu_settings_delete}"/></a></li>
+		<li>{$oOpenId->getOpenid()|escape:'html'} <a href="#" onclick="return deleteOpenID('{$oOpenId->getOpenid()|escape:'html'}',this);"><img src="{$sTemplateWebPathPlugin}img/delete.png" alt="{$aLang.plugin.openid.menu_settings_delete}" title="{$aLang.plugin.openid.menu_settings_delete}"/></a></li>
 	{/foreach}
 	</ul>
 {else}
-	{$aLang.openid_menu_settings_empty}
+	{$aLang.plugin.openid.menu_settings_empty}
 {/if}
+
+</form>
 
 {include file='footer.tpl'}

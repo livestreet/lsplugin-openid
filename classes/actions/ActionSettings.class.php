@@ -101,14 +101,14 @@ class PluginOpenid_ActionSettings extends ActionPlugin {
 		 */
 		$aOpenId=$this->PluginOpenid_Openid_GetOpenIdByUser($this->oUserCurrent->getId());
 		if (count($aOpenId)==1 and !$this->oUserCurrent->getMail()) {
-			$this->Message_AddErrorSingle($this->Lang_Get('openid_menu_settings_delete_last_error'),$this->Lang_Get('error'));
+			$this->Message_AddErrorSingle($this->Lang_Get('plugin.openid.menu_settings_delete_last_error'),$this->Lang_Get('error'));
 			return;
 		}
 		/**
 		 * Удаляем
 		 */
 		$this->PluginOpenid_Openid_DeleteOpenId($sOpenId);
-		$this->Message_AddNoticeSingle($this->Lang_Get('openid_menu_settings_delete_ok'),$this->Lang_Get('attention'));		
+		$this->Message_AddNoticeSingle($this->Lang_Get('plugin.openid.menu_settings_delete_ok'),$this->Lang_Get('attention'));
 	}
 	/**
 	 * При завершении экшена загружаем переменные в шаблон

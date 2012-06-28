@@ -38,15 +38,15 @@ $config['buggy_gmp']   = false; // для обхода проблемы с ши�
 /**
  * Настройки авторизации ВКонтакте
  */
-$config['vk']['id']   = 1111; // ID приложения
-$config['vk']['secure_key']   = '1111'; // Защищенный ключ приложения
+$config['vk']['id']   = 1869249; // ID приложения
+$config['vk']['secure_key']   = 'i9V9HfTbxHGuHEDFpGXP'; // Защищенный ключ приложения
 $config['vk']['transport_path']   = '/plugins/openid/include/xd_receiver.html'; // Путь от корня сайта до файла транспорта
 
 /**
  * Настройки Facebook Application
  */
-$config['fb']['id']   = 1111; // Application ID
-$config['fb']['secret']   = '1111'; // Application Secret
+$config['fb']['id']   = '154247381272531'; // Application ID
+$config['fb']['secret']   = '591ff2b88e67d02cafdb82e1d235bf8d'; // Application Secret
 
 /**
  * Настройки Twitter Application

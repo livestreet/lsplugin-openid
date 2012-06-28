@@ -45,7 +45,7 @@ class PluginOpenid_HookLogin extends Hook {
         /**
          * Хук на меню настроек пользователя
          */
-        $this->AddHook('template_menu_settings', 'MenuSettingsTpl', __CLASS__);
+        $this->AddHook('template_menu_settings_settings_item', 'MenuSettingsTpl', __CLASS__);
     }
 
     /**

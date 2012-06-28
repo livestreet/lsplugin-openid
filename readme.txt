@@ -1,4 +1,4 @@
-Плагин "OpenID" (версия 1.2.1) для LiveStreet 0.4.2 и 0.5
+Плагин "OpenID" (версия 1.3) для LiveStreet 1.0
 
 ОПИСАНИЕ
 Позволяет пользователям авторизоваться/зарегистрироваться через OpenID, ВКонтакте, Facebook, Twitter, Gmail, Yandex, Rambler.

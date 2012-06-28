@@ -1,6 +1,7 @@
-{include file='header.light.tpl'}
+{assign var="noSidebar" value=true}
+{include file='header.tpl'}
 
-<link rel="stylesheet" type="text/css" href="{$sTemplateWebPathPlugin}css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="{$aTemplateWebPathPlugin.openid}css/style.css" media="all" />
 
 <div id="vk_api_transport"></div>
 <script src="http://vkontakte.ru/js/api/openapi.js" type="text/javascript" charset="windows-1251"></script>
@@ -9,26 +10,26 @@
 <script src="http://connect.facebook.net/en_US/all.js"></script>
 
 <div class="openid-block">
-	<h1>{$aLang.openid_enter_title} <img src="{$sTemplateWebPathPlugin}img/openid.png" alt="openid" class="openid-img" title="{$aLang.openid}" alt="{$aLang.openid}"/></h1>
+	<h1>{$aLang.plugin.openid.enter_title} <img src="{$aTemplateWebPathPlugin.openid}img/openid.png" alt="openid" class="openid-img" title="{$aLang.openid}" alt="{$aLang.openid}"/></h1>
 	
 	<form method="post" action="{router page='login'}openid/enter/" name="fopenid" id="openid_form">
 		<div style="overflow: hidden; zoom: 1;">
 			<input type="text" style="float: left" class="openid-text" maxlength="255" name="open_login" id="open_login" />
 			<input type="hidden" name="submit_open_login" id="submit_open_login_hidden" value="go"/>
 			<input type="hidden" value="{$_aRequest.return}" name="return" />
-			<a href="#" class="openid-login" onclick="getEl('openid_form').submit(); return false;"><span>{$aLang.openid_enter}</span></a>
+			<a href="#" class="openid-login" onclick="getEl('openid_form').submit(); return false;"><span>{$aLang.plugin.openid.enter}</span></a>
 		</div>
 		
 		<div class="openid-services">
-			<p>{$aLang.openid_choose_service}</p>
+			<p>{$aLang.plugin.openid.choose_service}</p>
 
-			<a href="javascript: openid_fb()"><img src="{$sTemplateWebPathPlugin}img/openid_fb.png" alt="facebook" width="154px" height="22px" /></a>
-			<a href="javascript: openid_twitter()"><img src="{$sTemplateWebPathPlugin}img/openid_twitter.png" alt="twitter" width="151px" height="24px" /></a>
+			<a href="javascript: openid_fb()"><img src="{$aTemplateWebPathPlugin.openid}img/openid_fb.png" alt="facebook" width="154px" height="22px" /></a>
+			<a href="javascript: openid_twitter()"><img src="{$aTemplateWebPathPlugin.openid}img/openid_twitter.png" alt="twitter" width="151px" height="24px" /></a>
 			<br>
-			<a href="javascript: openid_yandex()"><img src="{$sTemplateWebPathPlugin}img/openid_yandex.png" alt="yandex" width="47px" height="21px" /></a>
-			<a href="javascript: openid_google()"><img src="{$sTemplateWebPathPlugin}img/openid_google.png" class="google"  alt="google" width="63px" height="21px" /></a>
-			<a href="javascript: openid_rambler()"><img src="{$sTemplateWebPathPlugin}img/openid_rambler.png" alt="rambler" width="84px" height="21px" /></a>
-			<a href="javascript: openid_vk()"><img src="{$sTemplateWebPathPlugin}img/openid_vk.png" alt="vkontakte" width="84px" height="21px" /></a>			
+			<a href="javascript: openid_yandex()"><img src="{$aTemplateWebPathPlugin.openid}img/openid_yandex.png" alt="yandex" width="47px" height="21px" /></a>
+			<a href="javascript: openid_google()"><img src="{$aTemplateWebPathPlugin.openid}img/openid_google.png" class="google"  alt="google" width="63px" height="21px" /></a>
+			<a href="javascript: openid_rambler()"><img src="{$aTemplateWebPathPlugin.openid}img/openid_rambler.png" alt="rambler" width="84px" height="21px" /></a>
+			<a href="javascript: openid_vk()"><img src="{$aTemplateWebPathPlugin.openid}img/openid_vk.png" alt="vkontakte" width="84px" height="21px" /></a>			
 		</div>					
 	</form>
 </div>
@@ -80,12 +81,13 @@ var sTwitterLoginPath='{$aRouter.login}'+'openid/twitter/?authorize=1';
 			if (response.session) {
 				window.location = sFbLoginPath;
 			} else {
-				FB.login(null,{perms:'read_stream,publish_stream,offline_access,email'});				
+				//FB.login(null,{scope:'read_stream,publish_stream,offline_access,email'});
 				FB.login(function(response) {
-					if (response.session) {
+					console.log('fsdfs',response);
+					if (response.authResponse) {
 						window.location = sFbLoginPath;
 					}
-				});				
+				},{scope:'read_stream,publish_stream,offline_access,email'});
 			}
 		});
 	}
@@ -100,4 +102,4 @@ var sTwitterLoginPath='{$aRouter.login}'+'openid/twitter/?authorize=1';
 </script>
 {/literal}
 
-{include file='footer.light.tpl'}
+{include file='footer.tpl'}

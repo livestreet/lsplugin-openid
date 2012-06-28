@@ -125,7 +125,7 @@ class PluginOpenid_ModuleOpenid extends Module {
 			/**
 			 * Пользователь отменил авторизацию
 			 */
-			$aReturn['msg']=$this->Lang_Get('openid_result_cancel');
+			$aReturn['msg']=$this->Lang_Get('plugin.openid.result_cancel');
 		} else if ($response->status == Auth_OpenID_FAILURE) {
 			/**
 			 * Ошибка авторизации
@@ -135,7 +135,7 @@ class PluginOpenid_ModuleOpenid extends Module {
 			/**
 			 * Авторизация прошла успешно
 			 */
-			$aReturn['msg']=$this->Lang_Get('openid_result_success');
+			$aReturn['msg']=$this->Lang_Get('plugin.openid.result_success');
 			$aReturn['status']=true;
 			$aReturn['id']=$response->getDisplayIdentifier();
 			/**
