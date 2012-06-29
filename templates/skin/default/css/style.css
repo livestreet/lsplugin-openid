@@ -1,7 +1,4 @@
-body { background: #fff !important; }
-
-h1 { font: normal 20px Arial, Sans-Serif; }
-h2 { font: normal 18px Arial, Sans-Serif; }
+h1.openid-header { font: normal 20px Arial, Sans-Serif; }
 
 .openid-block { width: 500px; margin: 0 auto; padding-top: 10px; }
 .openid-block.wide { width: 650px; }

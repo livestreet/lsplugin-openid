@@ -5,7 +5,10 @@
 
 <form action="" method="POST" enctype="multipart/form-data" class="wrapper-content">
 
-<h3>{$aLang.plugin.openid.menu_settings_title}</h3>
+
+	<fieldset>
+		<legend>{$aLang.plugin.openid.menu_settings_title}</legend>
+
 
 {if count($aOpenId)}
 
@@ -32,13 +35,16 @@
 
 	<ul>
 	{foreach from=$aOpenId item=oOpenId}
-		<li>{$oOpenId->getOpenid()|escape:'html'} <a href="#" onclick="return deleteOpenID('{$oOpenId->getOpenid()|escape:'html'}',this);"><img src="{$sTemplateWebPathPlugin}img/delete.png" alt="{$aLang.plugin.openid.menu_settings_delete}" title="{$aLang.plugin.openid.menu_settings_delete}"/></a></li>
+		<li>{$oOpenId->getOpenid()|escape:'html'} <a href="#" onclick="return deleteOpenID('{$oOpenId->getOpenid()|escape:'html'}',this);"><img src="{$aTemplateWebPathPlugin.openid}img/delete.png" alt="{$aLang.plugin.openid.menu_settings_delete}" title="{$aLang.plugin.openid.menu_settings_delete}"/></a></li>
 	{/foreach}
 	</ul>
 {else}
 	{$aLang.plugin.openid.menu_settings_empty}
 {/if}
 
+	</fieldset>
 </form>
+
+
 
 {include file='footer.tpl'}

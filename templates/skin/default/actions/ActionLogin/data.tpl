@@ -5,7 +5,7 @@
 <link rel="stylesheet" type="text/css" href="{$aTemplateWebPathPlugin.openid}css/style.css" media="all" />
 
 <div class="openid-block step-two">
-	<h1>{$aLang.plugin.openid.continue}</h1>
+	<h1 class="openid-header">{$aLang.plugin.openid.continue}</h1>
 
 	<ul>
 		<li {if !$_aRequest.submit_mail}class="active"{/if} id="li_data"><a href="javascript:showFormData()" ><span>{$aLang.plugin.openid.type_new}</span></a></li>

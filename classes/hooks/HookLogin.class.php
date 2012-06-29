@@ -79,7 +79,7 @@ class PluginOpenid_HookLogin extends Hook {
      * @return unknown
      */
     public function LoginTpl() {    	
-		$this->Viewer_Assign('sTemplateWebPathPlugin',Plugin::GetTemplateWebPath(__CLASS__));
+		//$this->Viewer_Assign('sTemplateWebPathPlugin',Plugin::GetTemplateWebPath(__CLASS__));
     	return $this->Viewer_Fetch(Plugin::GetTemplatePath('openid').'inject_login.tpl');
     }
     /**

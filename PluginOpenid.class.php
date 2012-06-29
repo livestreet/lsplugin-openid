@@ -19,7 +19,7 @@
  * Запрещаем напрямую через браузер обращение к этому файлу.
  */
 if (!class_exists('Plugin')) {
-	die('Hacking attemp!');
+	die('Hacking attempt!');
 }
 /**
  * Плагин "OpenID"
@@ -27,9 +27,9 @@ if (!class_exists('Plugin')) {
  */
 class PluginOpenid extends Plugin {
 	/**
-	 * Активация плагина.	 
+	 * Активация плагина.
 	 */
-	public function Activate() {		
+	public function Activate() {
 		if (!$this->isTableExists('prefix_openid')) {
 			/**
 			 * При активации выполняем SQL дамп
@@ -38,27 +38,12 @@ class PluginOpenid extends Plugin {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Инициализация плагина
 	 */
 	public function Init() {
-		
-	}
-	
-	/**
-	 * Проверяет наличие таблицы в БД
-	 *
-	 * @param unknown_type $sTableName
-	 * @return unknown
-	 */
-	protected function isTableExists($sTableName) {
-		$sTableName = str_replace('prefix_', Config::Get('db.table.prefix'), $sTableName);
-		$sQuery="SHOW TABLES LIKE '{$sTableName}'";
-		if ($aRows=$this->Database_GetConnect()->select($sQuery)) {
-			return true;
-		}
-		return false;
+
 	}
 }
 ?>

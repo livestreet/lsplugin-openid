@@ -54,5 +54,13 @@ $config['fb']['secret']   = '1111'; // Application Secret
 $config['twitter']['token']   = '1111'; // Consumer key
 $config['twitter']['token_secret']   = '1111'; // Consumer secret
 
+
+
+$config['$root$']['block']['rule_settings_openid'] = array(
+	'action'  => array( 'openid_settings' ),
+	'blocks'  => array( 'right' => array('actions/ActionProfile/sidebar.tpl') ),
+);
+
+
 return $config;
 ?>

@@ -19,17 +19,28 @@
  * Обрабатывает настройки OpenId для пользователя
  *
  */
-class PluginOpenid_ActionSettings extends ActionPlugin {		
+class PluginOpenid_ActionSettings extends ActionPlugin {
 	/**
 	 * Какое меню активно
 	 *
 	 * @var unknown_type
 	 */
-	protected $sMenuItemSelect='openid';
-	protected $oUserCurrent=null;
-	
 	/**
-	 * Инициализация 
+	 * Какое меню активно
+	 *
+	 * @var string
+	 */
+	protected $sMenuItemSelect='settings';
+	/**
+	 * Какое подменю активно
+	 *
+	 * @var string
+	 */
+	protected $sMenuSubItemSelect='openid';
+	protected $oUserCurrent=null;
+
+	/**
+	 * Инициализация
 	 *
 	 * @return null
 	 */
@@ -39,23 +50,22 @@ class PluginOpenid_ActionSettings extends ActionPlugin {
 		 */
 		if (!$this->User_IsAuthorization()) {
 			$this->Message_AddErrorSingle($this->Lang_Get('not_access'),$this->Lang_Get('error'));
-			return Router::Action('error'); 
+			return Router::Action('error');
 		}
 		$this->oUserCurrent=$this->User_GetUserCurrent();
-		$this->Viewer_Assign('sTemplateWebPathPlugin',Plugin::GetTemplateWebPath(__CLASS__));
 	}
-	
+
 	protected function RegisterEvent() {
-		$this->AddEventPreg('/^settings$/i','/^$/i','EventSettings');		
-		$this->AddEventPreg('/^settings$/i','/^ajaxdeleteopenid$/i','EventAjaxDeleteOpenId');		
+		$this->AddEventPreg('/^settings$/i','/^$/i','EventSettings');
+		$this->AddEventPreg('/^settings$/i','/^ajaxdeleteopenid$/i','EventAjaxDeleteOpenId');
 	}
-		
-	
+
+
 	/**********************************************************************************
 	 ************************ РЕАЛИЗАЦИЯ ЭКШЕНА ***************************************
 	 **********************************************************************************
 	 */
-	
+
 	/**
 	 * Страница настроект OpenID
 	 *
@@ -71,7 +81,7 @@ class PluginOpenid_ActionSettings extends ActionPlugin {
 		 */
 		$this->SetTemplateAction('settings');
 	}
-	
+
 	/**
 	 * Обработка Ajax удаления связи с OpenID
 	 *
@@ -84,17 +94,17 @@ class PluginOpenid_ActionSettings extends ActionPlugin {
 		/**
 		 * Проверяем существование OpenID
 		 */
-		$sOpenId=getRequest('openid',null,'post');		
+		$sOpenId=getRequest('openid',null,'post');
 		if(!($oOpenId=$this->PluginOpenid_Openid_GetOpenId($sOpenId))) {
 			$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('error'));
-			return;			
+			return;
 		}
 		/**
 		 * Проверяем права на удаление
 		 */
 		if($oOpenId->getUserId()!=$this->oUserCurrent->getId()) {
 			$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('error'));
-			return;			
+			return;
 		}
 		/**
 		 * Не даем возможность удалить, если у пользователя в профиле нет почты и это последний OpenID
@@ -114,8 +124,27 @@ class PluginOpenid_ActionSettings extends ActionPlugin {
 	 * При завершении экшена загружаем переменные в шаблон
 	 *
 	 */
-	public function EventShutdown() {		
+	public function EventShutdown() {
+		$iCountTopicFavourite=$this->Topic_GetCountTopicsFavouriteByUserId($this->oUserCurrent->getId());
+		$iCountTopicUser=$this->Topic_GetCountTopicsPersonalByUser($this->oUserCurrent->getId(),1);
+		$iCountCommentUser=$this->Comment_GetCountCommentsByUserId($this->oUserCurrent->getId(),'topic');
+		$iCountCommentFavourite=$this->Comment_GetCountCommentsFavouriteByUserId($this->oUserCurrent->getId());
+		$iCountNoteUser=$this->User_GetCountUserNotesByUserId($this->oUserCurrent->getId());
+
+		$this->Viewer_Assign('oUserProfile',$this->oUserCurrent);
+		$this->Viewer_Assign('iCountWallUser',$this->Wall_GetCountWall(array('wall_user_id'=>$this->oUserCurrent->getId(),'pid'=>null)));
+		/**
+		 * Общее число публикация и избранного
+		 */
+		$this->Viewer_Assign('iCountCreated',$iCountNoteUser+$iCountTopicUser+$iCountCommentUser);
+		$this->Viewer_Assign('iCountFavourite',$iCountCommentFavourite+$iCountTopicFavourite);
+		$this->Viewer_Assign('iCountFriendsUser',$this->User_GetCountUsersFriend($this->oUserCurrent->getId()));
+
+		/**
+		 * Загружаем в шаблон необходимые переменные
+		 */
 		$this->Viewer_Assign('sMenuItemSelect',$this->sMenuItemSelect);
+		$this->Viewer_Assign('sMenuSubItemSelect',$this->sMenuSubItemSelect);
 	}
 }
 ?>

@@ -10,7 +10,7 @@
 <script src="http://connect.facebook.net/en_US/all.js"></script>
 
 <div class="openid-block">
-	<h1>{$aLang.plugin.openid.enter_title} <img src="{$aTemplateWebPathPlugin.openid}img/openid.png" alt="openid" class="openid-img" title="{$aLang.openid}" alt="{$aLang.openid}"/></h1>
+	<h1 class="openid-header">{$aLang.plugin.openid.enter_title} <img src="{$aTemplateWebPathPlugin.openid}img/openid.png" alt="openid" class="openid-img" title="{$aLang.openid}" alt="{$aLang.openid}"/></h1>
 	
 	<form method="post" action="{router page='login'}openid/enter/" name="fopenid" id="openid_form">
 		<div style="overflow: hidden; zoom: 1;">

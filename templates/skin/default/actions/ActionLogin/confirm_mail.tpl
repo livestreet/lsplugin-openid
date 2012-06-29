@@ -5,7 +5,7 @@
 <link rel="stylesheet" type="text/css" href="{$aTemplateWebPathPlugin.openid}css/style.css" media="all" />
 
 <div class="openid-block step-three wide">
-	<h1>{$aLang.plugin.openid.confirm_mail_form_title} <img src="{$aTemplateWebPathPlugin.openid}img/openid.png" alt="openid" class="openid-img" />:
+	<h1 class="openid-header">{$aLang.plugin.openid.confirm_mail_form_title} <img src="{$aTemplateWebPathPlugin.openid}img/openid.png" alt="openid" class="openid-img" />:
 	<span>{$oKey->getOpenid()|escape:'html'} {if $sMailOpenId}({$sMailOpenId|escape:'html'}){/if}</span></h1>
 			
 	<form  method="post" action="{router page='login'}openid/confirm/" id="form_confirm">			

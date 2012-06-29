@@ -19,9 +19,9 @@
  * Обрабатывает авторизацию через OpenId
  *
  */
-class PluginOpenid_ActionLogin extends ActionPlugin {		
+class PluginOpenid_ActionLogin extends ActionPlugin {
 	/**
-	 * Инициализация 
+	 * Инициализация
 	 *
 	 * @return null
 	 */
@@ -31,10 +31,10 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 		 */
 		if ($this->User_IsAuthorization()) {
 			$this->Message_AddErrorSingle($this->Lang_Get('registration_is_authorization'),$this->Lang_Get('attention'));
-			return Router::Action('error'); 
+			return Router::Action('error');
 		}
 	}
-	
+
 	protected function RegisterEvent() {
 		$this->AddEventPreg('/^login$/i','/^$/i','EventLogin');
 		$this->AddEventPreg('/^login$/i','/^enter$/i','/^(finish)?$/i','EventOpenId');
@@ -44,13 +44,13 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 		$this->AddEventPreg('/^login$/i','/^twitter$/i','/^$/i','EventTwitter');
 		$this->AddEventPreg('/^login$/i','/^confirm$/i','/^$/i','EventConfirmMail');
 	}
-		
-	
+
+
 	/**********************************************************************************
 	 ************************ РЕАЛИЗАЦИЯ ЭКШЕНА ***************************************
 	 **********************************************************************************
 	 */
-	
+
 	/**
 	 * Отображение формы ввода Openid
 	 *
@@ -61,7 +61,7 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 		 */
 		$this->SetTemplateAction('openid');
 	}
-	
+
 	/**
 	 * Подтверждение email для связи с OpenId
 	 */
@@ -73,7 +73,7 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 			$this->Message_AddErrorSingle($this->Lang_Get('plugin.openid.confirm_mail_key_no_valid'));
 			return Router::Action('error');
 		}
-		
+
 		/**
 		 * Если пользователь подтвердил связь с Openid
 		 */
@@ -111,10 +111,10 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 			 */
 			$this->User_Authorization($oUser);
 			Router::Location(Config::Get('path.root.web').'/');
-			
-		/**
-		 * Если пользователь отказался подтверждать связь с Openid
-		 */
+
+			/**
+			 * Если пользователь отказался подтверждать связь с Openid
+			 */
 		} elseif (getRequest('submit_cancel',null,'post')) {
 			$this->Security_ValidateSendForm();
 			/**
@@ -137,14 +137,14 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 		}
 		$this->SetTemplateAction('confirm_mail');
 	}
-	
+
 	/**
 	 * Обработка дополнительных данных
 	 *
 	 */
 	protected function EventData() {
 		$this->SetTemplateAction('data');
-		
+
 		/**
 		 * Проверяем наличие временного ключа в куках
 		 */
@@ -153,7 +153,7 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 			if ($oKey=$this->PluginOpenid_Openid_GetTmp($sKey)) {
 				if (strtotime($oKey->getDate())>=time()-Config::Get('plugin.openid.time_key_limit')) {
 					// ключ валиден
-					$bKeyValid=true;					
+					$bKeyValid=true;
 				}
 			}
 		}
@@ -163,7 +163,7 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 		if (!$bKeyValid) {
 			$this->Message_AddErrorSingle($this->Lang_Get('plugin.openid.key_no_valid'));
 			return Router::Action('error');
-		}		
+		}
 		/**
 		 * Если есть связь с OpenId, то авторизуем
 		 */
@@ -232,17 +232,17 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 				$oUser->setLogin(getRequest('login'));
 				$sPassword='';
 				if (getRequest('mail')) {
-					$oUser->setMail(getRequest('mail'));					
+					$oUser->setMail(getRequest('mail'));
 					$sPassword=func_generator(7);
 					$oUser->setPassword(func_encrypt($sPassword));
 				} else {
 					$oUser->setMail(null);
 					$oUser->setPassword('');
-				}				
+				}
 				$oUser->setDateRegister(date("Y-m-d H:i:s"));
 				$oUser->setIpRegister(func_getIp());
 				$oUser->setActivate(1);
-				$oUser->setActivateKey(null);				
+				$oUser->setActivateKey(null);
 				/**
 				 * Регистрируем
 				 */
@@ -277,9 +277,9 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 					Router::Location(Config::Get('path.root.web').'/');
 				}
 			}
-		/**
-		 * Отправили форму для существующего пользователя
-		 */
+			/**
+			 * Отправили форму для существующего пользователя
+			 */
 		} elseif (getRequest('submit_mail',null,'post')) {
 			/**
 			 * Проверяем есть ли пользователь с таким email, если есть то отправляем ему код активации текущего OpenId
@@ -295,13 +295,13 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 					$bError=true;
 				}
 			}
-			
+
 			if (!$bError) {
 				/**
 				 * Генерируем ключь подтверждения
 				 */
 				$oKey->setConfirmMail($oUser->getMail());
-				$oKey->setConfirmMailKey(func_generator(32));				
+				$oKey->setConfirmMailKey(func_generator(32));
 				$this->PluginOpenid_Openid_UpdateTmp($oKey);
 				/**
 				 * Отправляем уведомление с активацией
@@ -323,12 +323,12 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 			}
 		}
 	}
-	
+
 	/**
 	 * OpenId авторизация
 	 *
 	 */
-	protected function EventOpenId() {		
+	protected function EventOpenId() {
 		$bFinish=false;
 		if ($this->GetParam(1)) {
 			$bFinish=true;
@@ -344,7 +344,7 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 			/**
 			 * Проверяем корректность авторизации
 			 */
-			if ($aReturn=$this->PluginOpenid_Openid_Verify($sPathReturn) and $aReturn['status']) {				
+			if ($aReturn=$this->PluginOpenid_Openid_Verify($sPathReturn) and $aReturn['status']) {
 				$this->Message_AddNotice($aReturn['msg'],$this->Lang_Get('attention'));
 				$sOpenId=$aReturn['id'];
 				/**
@@ -372,15 +372,15 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 						$aData['mail']=$aReturn['ax']['email'];
 					}
 					/**
-				 	* Заполняем временную таблицу, пишем в куки ключ и перенаправляем на страницу ввода дополнительных данных
-				 	*/
+					 * Заполняем временную таблицу, пишем в куки ключ и перенаправляем на страницу ввода дополнительных данных
+					 */
 					$oTmp=Engine::GetEntity('PluginOpenid_Openid_Tmp');
 					$oTmp->setKey(func_generator(32));
 					$oTmp->setOpenid($sOpenId);
 					$oTmp->setData(serialize($aData));
 					$oTmp->setDate(date("Y-m-d H:i:s"));
 					$this->PluginOpenid_Openid_AddTmp($oTmp);
-					
+
 					setcookie('openidkey',$oTmp->getKey(),time()+Config::Get('plugin.openid.time_key_limit'),Config::Get('sys.cookie.path'),Config::Get('sys.cookie.host'));
 					Router::Location(Router::GetPath('login').'openid/data/');
 				}
@@ -397,19 +397,19 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 			 */
 			if (!$this->PluginOpenid_Openid_Login(getRequest('open_login'),$sPathReturn)) {
 				$this->Message_AddErrorSingle($this->Lang_Get('plugin.openid.result_error'),$this->Lang_Get('error'));
-			} 
+			}
 		}
 		/**
 		 * Шаблон
 		 */
 		$this->SetTemplateAction('openid');
 	}
-	
+
 	/**
 	 * Авторизация ВКонтакте
 	 *
 	 */
-	protected function EventVk() {		
+	protected function EventVk() {
 		/**
 		 * Читаем куку и проверяем подпись
 		 */
@@ -439,7 +439,7 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 			/**
 			 * Успешная авторизация
 			 */
-			if ($sHash==$aParams['sig']) {				
+			if ($sHash==$aParams['sig']) {
 				$sOpenId='vk_'.$aParams['mid'];
 				/**
 				 * Если уже есть связь с этим OpenID то авторизуем
@@ -447,7 +447,7 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 				if ($oUser=$this->PluginOpenid_Openid_GetUserByOpenId($sOpenId)) {
 					$this->User_Authorization($oUser);
 					Router::Location(Config::Get('path.root.web').'/');
-				} else {					
+				} else {
 					/**
 					 * Связи нет
 					 */
@@ -455,20 +455,20 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 					/**
 					 * Заполняем данные (логин)
 					 */
-					
-					
+
+
 					/**
-				 	* Заполняем временную таблицу, пишем в куки ключ и перенаправляем на страницу ввода дополнительных данных
-				 	*/
+					 * Заполняем временную таблицу, пишем в куки ключ и перенаправляем на страницу ввода дополнительных данных
+					 */
 					$oTmp=Engine::GetEntity('PluginOpenid_Openid_Tmp');
 					$oTmp->setKey(func_generator(32));
 					$oTmp->setOpenid($sOpenId);
 					$oTmp->setData(serialize($aData));
 					$oTmp->setDate(date("Y-m-d H:i:s"));
 					$this->PluginOpenid_Openid_AddTmp($oTmp);
-					
+
 					setcookie('openidkey',$oTmp->getKey(),time()+Config::Get('plugin.openid.time_key_limit'),Config::Get('sys.cookie.path'),Config::Get('sys.cookie.host'));
-					Router::Location(Router::GetPath('login').'openid/data/');				
+					Router::Location(Router::GetPath('login').'openid/data/');
 				}
 			} else {
 				setcookie($sCookieName,'',1,Config::Get('sys.cookie.path'),Config::Get('sys.cookie.host'));
@@ -477,12 +477,12 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 		}
 		$this->SetTemplateAction('openid');
 	}
-	
+
 	/**
 	 * Авторизация через Facebook
 	 *
 	 */
-	protected function EventFacebook() {		
+	protected function EventFacebook() {
 		/**
 		 * Читаем куку и проверяем подпись
 		 */
@@ -498,7 +498,7 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 				if ($oUser=$this->PluginOpenid_Openid_GetUserByOpenId($sOpenId)) {
 					$this->User_Authorization($oUser);
 					Router::Location(Config::Get('path.root.web').'/');
-				} else {					
+				} else {
 					/**
 					 * Связи нет
 					 */
@@ -506,21 +506,21 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 					/**
 					 * Заполняем данные (логин)
 					 */
-					
-					
+
+
 					/**
-				 	* Заполняем временную таблицу, пишем в куки ключ и перенаправляем на страницу ввода дополнительных данных
-				 	*/
+					 * Заполняем временную таблицу, пишем в куки ключ и перенаправляем на страницу ввода дополнительных данных
+					 */
 					$oTmp=Engine::GetEntity('PluginOpenid_Openid_Tmp');
 					$oTmp->setKey(func_generator(32));
 					$oTmp->setOpenid($sOpenId);
 					$oTmp->setData(serialize($aData));
 					$oTmp->setDate(date("Y-m-d H:i:s"));
 					$this->PluginOpenid_Openid_AddTmp($oTmp);
-					
+
 					setcookie('openidkey',$oTmp->getKey(),time()+Config::Get('plugin.openid.time_key_limit'),Config::Get('sys.cookie.path'),Config::Get('sys.cookie.host'));
-					Router::Location(Router::GetPath('login').'openid/data/');				
-				}				
+					Router::Location(Router::GetPath('login').'openid/data/');
+				}
 			} else {
 				setcookie($sCookieName,'',1,Config::Get('sys.cookie.path'),Config::Get('sys.cookie.host'));
 				$this->Message_AddErrorSingle($this->Lang_Get('plugin.openid.result_error_fb'),$this->Lang_Get('error'));
@@ -528,25 +528,25 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 		}
 		$this->SetTemplateAction('openid');
 	}
-	
+
 	/**
 	 * Авторизация через Twitter
 	 *
 	 */
 	protected function EventTwitter() {
-		
+
 		if (getRequest('callback')) {
 			if ($this->PluginOpenid_Oauth_VerifyTwitter() and $data=$this->PluginOpenid_Oauth_GetTwitter('account/verify_credentials')) {
-											
+
 				$sOpenId='twitter_'.$data->screen_name;
-				
+
 				/**
 				 * Если уже есть связь с этим OpenID то авторизуем
 				 */
 				if ($oUser=$this->PluginOpenid_Openid_GetUserByOpenId($sOpenId)) {
 					$this->User_Authorization($oUser);
 					Router::Location(Config::Get('path.root.web').'/');
-				} else {					
+				} else {
 					/**
 					 * Связи нет
 					 */
@@ -554,34 +554,34 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 					/**
 					 * Заполняем данные (логин)
 					 */
-					
-					
+
+
 					/**
-				 	* Заполняем временную таблицу, пишем в куки ключ и перенаправляем на страницу ввода дополнительных данных
-				 	*/
+					 * Заполняем временную таблицу, пишем в куки ключ и перенаправляем на страницу ввода дополнительных данных
+					 */
 					$oTmp=Engine::GetEntity('PluginOpenid_Openid_Tmp');
 					$oTmp->setKey(func_generator(32));
 					$oTmp->setOpenid($sOpenId);
 					$oTmp->setData(serialize($aData));
 					$oTmp->setDate(date("Y-m-d H:i:s"));
 					$this->PluginOpenid_Openid_AddTmp($oTmp);
-					
+
 					setcookie('openidkey',$oTmp->getKey(),time()+Config::Get('plugin.openid.time_key_limit'),Config::Get('sys.cookie.path'),Config::Get('sys.cookie.host'));
-					Router::Location(Router::GetPath('login').'openid/data/');				
+					Router::Location(Router::GetPath('login').'openid/data/');
 				}
-				
-				
+
+
 			} else {
 				$this->Message_AddErrorSingle($this->Lang_Get('plugin.openid.result_error_twitter'),$this->Lang_Get('error'));
 			}
-		}		
-		
+		}
+
 		if (getRequest('authorize')) {
 			if (!$this->PluginOpenid_Oauth_LoginTwitter(Router::GetPath('login').'openid/twitter/?callback=1')) {
 				$this->Message_AddErrorSingle($this->Lang_Get('plugin.openid.result_error_twitter'),$this->Lang_Get('error'));
-			} 
+			}
 		}
-		
+
 		$this->SetTemplateAction('openid');
 	}
 

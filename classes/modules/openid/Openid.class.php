@@ -31,7 +31,7 @@ class PluginOpenid_ModuleOpenid extends Module {
 	public function Init() {
 		/**
 		 * Подключаем маппер
-		 */		
+		 */
 		$this->oMapper=Engine::GetMapper(__CLASS__);
 		/**
 		 * Если нужно то отключаем использование библиотеки GMP
@@ -63,7 +63,7 @@ class PluginOpenid_ModuleOpenid extends Module {
 		/**
 		 * Начинаем...
 		 */
-		$auth_request = $this->oConsumer->begin($sOpenId);		
+		$auth_request = $this->oConsumer->begin($sOpenId);
 		if (!$auth_request) {
 			return false;
 		}
@@ -85,11 +85,11 @@ class PluginOpenid_ModuleOpenid extends Module {
 		/**
 		 * Определяем тип редиректа на сервер провайдера OpenID
 		 */
-		if ($auth_request->shouldSendRedirect()) {			
+		if ($auth_request->shouldSendRedirect()) {
 			/**
 			 * Обычный редирект через header
 			 */
-			$redirect_url = $auth_request->redirectURL($this->getTrustRoot(),$sPath);			
+			$redirect_url = $auth_request->redirectURL($this->getTrustRoot(),$sPath);
 			if (Auth_OpenID::isFailure($redirect_url)) {
 				return false;
 			} else {
@@ -99,11 +99,11 @@ class PluginOpenid_ModuleOpenid extends Module {
 			/**
 			 * JavaScript редирект
 			 */
-			$form_html = $auth_request->htmlMarkup($this->getTrustRoot(), $sPath,false, array('id' => 'openid_message'));			
+			$form_html = $auth_request->htmlMarkup($this->getTrustRoot(), $sPath,false, array('id' => 'openid_message'));
 			if (Auth_OpenID::isFailure($form_html)) {
 				return false;
 			} else {
-				print $form_html;				
+				print $form_html;
 				exit();
 			}
 		}
@@ -119,9 +119,9 @@ class PluginOpenid_ModuleOpenid extends Module {
 			'status' => false,
 			'msg' => '',
 		);
-		
+
 		$response = $this->oConsumer->complete($sPath);
-		if ($response->status == Auth_OpenID_CANCEL) {			
+		if ($response->status == Auth_OpenID_CANCEL) {
 			/**
 			 * Пользователь отменил авторизацию
 			 */
@@ -147,15 +147,15 @@ class PluginOpenid_ModuleOpenid extends Module {
 			/**
 			 * Достаем дополнительные данные
 			 */
-			$ax_resp=new Auth_OpenID_AX_FetchResponse();        	
-        	if ($ax=$ax_resp->fromSuccessResponse($response)) {
-        		$aDataAx=$ax->data;
-        		if (isset($aDataAx['http://axschema.org/contact/email']) and isset($aDataAx['http://axschema.org/contact/email'][0])) {
-        			$aReturn['ax']['email']=$aDataAx['http://axschema.org/contact/email'][0];
-        		}        		
-        	}
+			$ax_resp=new Auth_OpenID_AX_FetchResponse();
+			if ($ax=$ax_resp->fromSuccessResponse($response)) {
+				$aDataAx=$ax->data;
+				if (isset($aDataAx['http://axschema.org/contact/email']) and isset($aDataAx['http://axschema.org/contact/email'][0])) {
+					$aReturn['ax']['email']=$aDataAx['http://axschema.org/contact/email'][0];
+				}
+			}
 		}
-		return $aReturn;		
+		return $aReturn;
 	}
 	/**
 	 * Возвращает полный путь до веб-сервера
@@ -164,9 +164,9 @@ class PluginOpenid_ModuleOpenid extends Module {
 	 */
 	protected function getTrustRoot() {
 		return sprintf("%s://%s:%s%s/",
-			$this->getScheme(), array_shift(explode(':', $_SERVER['HTTP_HOST'])),
-			$_SERVER['SERVER_PORT'],
-		'');
+					   $this->getScheme(), array_shift(explode(':', $_SERVER['HTTP_HOST'])),
+					   $_SERVER['SERVER_PORT'],
+					   '');
 	}
 	/**
 	 * Получает текущую схему протокола HTTP
