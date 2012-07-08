@@ -395,7 +395,7 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 			/**
 			 * Здесь происходит редирект на сервер OpenID
 			 */
-			if (!$this->PluginOpenid_Openid_Login(getRequest('open_login'),$sPathReturn)) {
+			if (!is_string(getRequest('open_login')) or !$this->PluginOpenid_Openid_Login(getRequest('open_login'),$sPathReturn)) {
 				$this->Message_AddErrorSingle($this->Lang_Get('plugin.openid.result_error'),$this->Lang_Get('error'));
 			}
 		}

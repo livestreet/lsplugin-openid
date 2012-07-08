@@ -250,6 +250,9 @@ class PluginOpenid_ModuleOpenid extends Module {
 	 * @return unknown
 	 */
 	public function GetTmpByConfirmMailKey($sKey) {
+		if (!is_string($sKey)) {
+			return false;
+		}
 		return $this->oMapper->GetTmpByConfirmMailKey($sKey);
 	}
 	/**
@@ -268,6 +271,9 @@ class PluginOpenid_ModuleOpenid extends Module {
 	 * @return unknown
 	 */
 	public function GetOpenIdByUser($sUserId) {
+		if (!is_string($sUserId)) {
+			return false;
+		}
 		return $this->oMapper->GetOpenIdByUser($sUserId);
 	}
 }
