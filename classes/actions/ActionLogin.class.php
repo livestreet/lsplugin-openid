@@ -267,10 +267,6 @@ class PluginOpenid_ActionLogin extends ActionPlugin {
 					$this->PluginOpenid_Openid_DeleteTmp($oKey->getKey());
 					setcookie('openidkey','',1,Config::Get('sys.cookie.path'),Config::Get('sys.cookie.host'));
 					/**
-					 * Создаем персональный блог
-					 */
-					$this->Blog_CreatePersonalBlog($oUser);
-					/**
 					 * Авторизуем
 					 */
 					$this->User_Authorization($oUser,true);
